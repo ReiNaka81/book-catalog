@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">Book Catalog</string>
+    <string name="api_base_url">https://your-api.example.com/api</string>
+    <string name="search_button_text">検索</string>
+    <string name="search_mode_label">検索モード</string>
+    <string name="login_button_text">ログイン</string>
+    <string name="logout_button_text">ログアウト</string>
+    <string name="auth_status_signed_out">未ログイン</string>
+    <string name="auth_status_signed_in">ログイン中: %1$s</string>
+    <string name="favorite_button_text">お気に入りに追加</string>
+    <string name="favorite_add_success">お気に入りに登録しました</string>
+    <string name="favorite_add_failure">お気に入り登録に失敗しました</string>
+    <string name="login_required_message">この機能を利用するにはログインしてください</string>
+    <string name="auth_in_progress">認証中…</string>
+    <string name="auth_failed">認証に失敗しました</string>
+    <string name="auth_cancelled">認証をキャンセルしました</string>
+    <string name="auth_success">ログインしました</string>
+    <string name="logout_success">ログアウトしました</string>
+    <string name="favorite_button_disabled_note">お気に入り登録にはログインが必要です</string>
+    <string name="favorites_button_text">お気に入り一覧</string>
+    <string name="favorites_title">お気に入り一覧</string>
+    <string name="favorites_reload_button">再読み込み</string>
+    <string name="favorites_empty">お気に入りはまだ登録されていません</string>
+    <string name="favorites_delete_confirm">お気に入りから削除しますか？</string>
+    <string name="favorites_delete_success">お気に入りを削除しました</string>
+    <string name="favorites_delete_failure">お気に入りの削除に失敗しました</string>
+    <string name="favorites_load_failure">お気に入りの取得に失敗しました</string>
+    <string name="favorite_registered_label">お気に入り登録済み</string>
+    <string name="pagination_prev">前ページ</string>
+    <string name="pagination_next">次ページ</string>
+    <string name="api_cognito_domain">https://your-domain.auth.ap-northeast-1.amazoncognito.com</string>
+    <string name="api_cognito_client_id">your_cognito_client_id</string>
+    <string name="api_cognito_redirect_uri">https://your-app.example.com/</string>
+
+    <string-array name="search_mode_labels">
+        <item>全件</item>
+        <item>タイトル</item>
+        <item>著者</item>
+    </string-array>
+    <string-array name="search_mode_values">
+        <item>all</item>
+        <item>title</item>
+        <item>author</item>
+    </string-array>
+</resources>

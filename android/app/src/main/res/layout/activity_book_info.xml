@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".BookInfoActivity">
+
+    <TextView
+        android:id="@+id/titleView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="タイトル"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/authorView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_weight="1" />
+
+    <TextView
+        android:id="@+id/authorView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="著者"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/titleView"
+        app:layout_constraintBottom_toTopOf="@+id/publisherView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_weight="1" />
+
+    <TextView
+        android:id="@+id/publisherView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="出版社"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/authorView"
+        app:layout_constraintBottom_toTopOf="@+id/priceView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_weight="1" />
+
+    <TextView
+        android:id="@+id/priceView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="価格"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/publisherView"
+        app:layout_constraintBottom_toTopOf="@+id/isbnView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_weight="1" />
+
+    <TextView
+        android:id="@+id/isbnView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="ISBN"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/priceView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/favoriteButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/favorite_button_text"
+        app:layout_constraintTop_toBottomOf="@+id/isbnView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

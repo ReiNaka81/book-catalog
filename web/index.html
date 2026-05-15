@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Catalog Platform</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    :root {
+      color-scheme: light;
+    }
+
+    body {
+      font-family: "Avenir Next", "Noto Sans JP", sans-serif;
+    }
+  </style>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/app.js" defer></script>
+</head>
+
+<body class="min-h-screen bg-[radial-gradient(circle_at_top,_#f5ffd8,_#f4efe2_48%,_#ece4d5)] text-stone-900">
+  <main class="mx-auto max-w-6xl px-6 py-10">
+    <section class="mb-10 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+      <div class="rounded-[2rem] border border-stone-200/80 bg-white/85 p-8 shadow-[0_24px_60px_rgba(60,74,28,0.12)] backdrop-blur">
+        <p class="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-stone-500">Portfolio Project</p>
+        <h1 class="text-4xl font-semibold tracking-tight">Book Catalog Platform</h1>
+        <p class="mt-4 max-w-2xl text-sm leading-7 text-stone-600">
+          Web と Android の両方から利用できる書籍管理アプリです。公開検索、認証付きのお気に入り管理、
+          管理者向けの蔵書追加・削除までを一つのサーバレス構成にまとめています。
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3 text-sm text-stone-600">
+          <span class="rounded-full bg-stone-100 px-4 py-2">Web / Android</span>
+          <span class="rounded-full bg-stone-100 px-4 py-2">Amazon Cognito</span>
+          <span class="rounded-full bg-stone-100 px-4 py-2">API Gateway + Lambda</span>
+          <span class="rounded-full bg-stone-100 px-4 py-2">DynamoDB</span>
+        </div>
+      </div>
+
+      <div class="rounded-[2rem] border border-stone-200/70 bg-[#1d2418] p-8 text-stone-50 shadow-[0_24px_60px_rgba(28,35,23,0.18)]">
+        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-lime-200/80">Capabilities</p>
+        <ul class="mt-5 space-y-4 text-sm leading-7 text-stone-300">
+          <li>タイトル・著者名ごとの検索モード切り替え</li>
+          <li>認証済みユーザー向けのお気に入り登録 / 削除</li>
+          <li>管理者グループの追加・削除操作</li>
+          <li>Terraform ベースのインフラ管理</li>
+        </ul>
+      </div>
+    </section>
+
+    <div id="app" class="hidden">
+      <section class="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
+        <div class="space-y-8">
+          <section class="rounded-[1.75rem] border border-stone-200/80 bg-white/90 p-7 shadow-[0_18px_50px_rgba(60,74,28,0.09)]">
+            <div class="mb-6 flex flex-col gap-4 border-b border-stone-200 pb-6 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.25em] text-stone-500">Search</p>
+                <h2 class="mt-2 text-2xl font-semibold tracking-tight">蔵書検索</h2>
+                <p class="mt-2 text-sm text-stone-500">タイトルまたは著者名から蔵書を検索できます。</p>
+              </div>
+              <div class="sm:text-right">
+                <p id="authStatus" class="text-sm text-stone-500">認証状態を確認中...</p>
+                <button
+                  id="authAction"
+                  type="button"
+                  class="mt-3 rounded-full border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 transition hover:border-stone-500 hover:text-stone-900"
+                >
+                  ログイン
+                </button>
+              </div>
+            </div>
+
+            <form id="searchForm" class="grid gap-3 md:grid-cols-[minmax(0,1fr)_170px_120px]">
+              <input
+                id="query"
+                type="text"
+                placeholder="タイトルまたは著者名"
+                class="rounded-2xl border border-stone-300 bg-stone-50 px-4 py-3"
+              />
+
+              <select id="mode" class="rounded-2xl border border-stone-300 bg-stone-50 px-4 py-3">
+                <option value="all">全件</option>
+                <option value="title">タイトル</option>
+                <option value="author">著者</option>
+              </select>
+
+              <button
+                type="submit"
+                class="rounded-2xl bg-[#405b2b] px-4 py-3 font-semibold text-white transition hover:bg-[#314522]"
+              >
+                検索
+              </button>
+            </form>
+          </section>
+
+          <section class="rounded-[1.75rem] border border-stone-200/80 bg-white/90 p-7 shadow-[0_18px_50px_rgba(60,74,28,0.09)]">
+            <div class="mb-4 flex items-center justify-between gap-4">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.25em] text-stone-500">Results</p>
+                <h2 class="mt-2 text-xl font-semibold tracking-tight">検索結果</h2>
+              </div>
+              <p id="resultMeta" class="text-sm text-stone-500">まだ検索していません</p>
+            </div>
+            <div id="result" class="overflow-x-auto">
+              <div class="rounded-2xl border border-dashed border-stone-300 bg-stone-50 px-5 py-6 text-sm text-stone-500">
+                タイトルまたは著者名を入力して検索を開始してください。
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="space-y-8">
+          <section id="favoritesSection" class="hidden rounded-[1.75rem] border border-stone-200/80 bg-white/90 p-7 shadow-[0_18px_50px_rgba(60,74,28,0.09)]">
+            <div class="mb-3 flex items-center justify-between gap-4">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.25em] text-stone-500">Favorites</p>
+                <h2 class="mt-2 text-xl font-semibold tracking-tight">お気に入り一覧</h2>
+              </div>
+              <button id="refreshFavorites" class="text-sm font-medium text-[#405b2b] underline underline-offset-4">
+                再読み込み
+              </button>
+            </div>
+            <div id="favoritesLoading" class="text-sm text-stone-500 hidden">読み込み中...</div>
+            <div id="favoritesEmpty" class="text-sm text-stone-500 hidden">お気に入りはまだ登録されていません</div>
+            <table id="favoritesTable" class="hidden w-full overflow-hidden rounded-2xl border border-stone-200 text-sm">
+              <thead class="bg-stone-100">
+                <tr>
+                  <th class="border-b border-stone-200 px-3 py-2 text-left">Book ID</th>
+                  <th class="border-b border-stone-200 px-3 py-2 text-center">操作</th>
+                </tr>
+              </thead>
+              <tbody id="favoritesTbody"></tbody>
+            </table>
+          </section>
+
+          <section id="adminPanel" class="hidden rounded-[1.75rem] border border-amber-200/80 bg-amber-50/90 p-7 shadow-[0_18px_50px_rgba(152,93,12,0.12)]">
+            <p class="text-xs font-semibold uppercase tracking-[0.25em] text-amber-700">Admin</p>
+            <h2 class="mt-2 text-xl font-semibold tracking-tight text-amber-950">管理者パネル</h2>
+            <p class="mt-2 text-sm text-amber-900/75">管理者グループに所属するユーザーのみ書籍を追加できます。</p>
+
+            <form id="adminForm" class="mt-6 flex flex-col gap-3">
+              <input id="bookId" placeholder="Book ID" class="rounded-2xl border border-amber-200 bg-white px-4 py-3" required />
+              <input id="titleAdmin" placeholder="タイトル" class="rounded-2xl border border-amber-200 bg-white px-4 py-3" required />
+              <input id="authorAdmin" placeholder="著者" class="rounded-2xl border border-amber-200 bg-white px-4 py-3" required />
+              <input id="publisherAdmin" placeholder="出版社" class="rounded-2xl border border-amber-200 bg-white px-4 py-3" required />
+              <input id="priceAdmin" type="number" min="0" step="1" placeholder="価格" class="rounded-2xl border border-amber-200 bg-white px-4 py-3" required />
+              <input id="isbnAdmin" placeholder="ISBN" class="rounded-2xl border border-amber-200 bg-white px-4 py-3" required />
+              <input id="publishedDateAdmin" type="date" class="rounded-2xl border border-amber-200 bg-white px-4 py-3" required />
+
+              <button type="submit" class="rounded-2xl bg-amber-600 px-4 py-3 font-semibold text-white transition hover:bg-amber-700">
+                書籍を追加
+              </button>
+            </form>
+          </section>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+
+</html>
